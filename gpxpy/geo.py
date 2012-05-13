@@ -78,6 +78,42 @@ def elevation_angle(location1, location2, radians=False):
 
     return 180 * angle / mod_math.pi
 
+def speed_values(location1, location2, _3d=False):
+    """ Returns speed_length, speed_seconds """
+    if not location1 or not location2:
+        return None, None
+
+    if not location1.time or not location2.time:
+        return None, None
+
+    if location1.time < location2.time:
+        speed_seconds = (location2.time - location1.time).seconds
+    else:
+        speed_seconds = (location1.time - location2.time).seconds
+
+    if _3d:
+        speed_length = location2.distance_3d(location1)
+    else:
+        speed_length = location2.distance_2d(location1)
+
+    if speed_seconds == 0:
+        return None, None
+
+    if speed_length == 0:
+        return None, None
+
+    return speed_length, speed_seconds
+
+def speed_2d(location1, location2):
+    speed_length, speed_seconds = speed_values(location1, location2, _3d=False)
+    if speed_length and speed_seconds:
+        return speed_length / speed_seconds
+
+def speed_3d(location1, location2):
+    speed_length, speed_seconds = speed_values(location1, location2, _3d=True)
+    if speed_length and speed_seconds:
+        return speed_length / speed_seconds
+
 class Location:
     """ Generic geographical location """
 

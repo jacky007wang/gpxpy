@@ -335,19 +335,11 @@ class GPXTrackPoint(mod_geo.Location):
 
         return delta.seconds
 
-    def speed(self, track_point):
-        if not track_point:
-            return None
+    def speed_2d(self, track_point):
+        return mod_geo.speed_2d(self, track_point)
 
-        seconds = self.time_difference(track_point)
-        length = self.distance_3d(track_point)
-        if not length:
-            length = self.distance_2d(track_point)
-
-        if not seconds or not length:
-            return None
-
-        return length / float(seconds)
+    def speed_3d(self, track_point):
+        return mod_geo.speed_3d(self, track_point)
 
     def __str__(self):
         return '[trkpt:%s,%s@%s@%s]' % (self.latitude, self.longitude, self.elevation, self.time)
@@ -777,7 +769,15 @@ class GPXTrackSegment:
         return Bounds(min_lat, max_lat, min_lon, max_lon)
 
     def get_speed(self, point_no):
-        """ Get speed at that point. Point may be a GPXTrackPoint instance or integer (point index) """
+        """
+        Get speed at that point. Point may be a GPXTrackPoint instance or integer (point index)
+
+        This value is computed as an average value of:
+        * the speed between the current and the previous point and
+        * the speed between the current and the next point.
+
+        TODO Take length in account!
+        """
 
         point = self.points[point_no]
 
@@ -792,8 +792,8 @@ class GPXTrackSegment:
         #mod_logging.debug('previous: %s' % previous_point)
         #mod_logging.debug('next: %s' % next_point)
 
-        speed_1 = point.speed(previous_point)
-        speed_2 = point.speed(next_point)
+        speed_1 = point.speed_2d(previous_point)
+        speed_2 = point.speed_2d(next_point)
 
         if speed_1:
             speed_1 = abs(speed_1)

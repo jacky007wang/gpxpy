@@ -67,8 +67,6 @@ def equals(object1, object2, ignore=None):
 
     return True
 
-# TODO: Track segment speed in point test
-
 class Tests(mod_unittest.TestCase):
 
     def __parse(self, file):
@@ -869,6 +867,8 @@ class Tests(mod_unittest.TestCase):
         self.assertEquals(loc1.elevation_angle(loc2), mod_geo.elevation_angle(loc1, loc2))
         self.assertEquals(loc1.elevation_angle(loc2, radians=True), mod_geo.elevation_angle(loc1, loc2, radians=True))
         self.assertEquals(loc1.elevation_angle(loc2, radians=False), mod_geo.elevation_angle(loc1, loc2, radians=False))
+
+#TODO: Speed test (geo functions, gpx class methods)
 
 if __name__ == '__main__':
     mod_unittest.main()
