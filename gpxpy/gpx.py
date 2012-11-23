@@ -1128,6 +1128,7 @@ class GPX:
     url = None
     urlname = None
     keywords = None
+    distance = None
 
     waypoints = []
     routes = []
@@ -1158,6 +1159,7 @@ class GPX:
         self.urlname = None
         self.time = None
         self.keywords = None
+        self.distance = None
 
         self.min_latitude = None
         self.max_latitude = None
@@ -1574,6 +1576,8 @@ class GPX:
             content += mod_utils.to_xml('time', content=self.time.strftime(DATE_FORMAT))
         if self.keywords:
             content += mod_utils.to_xml('keywords', content=self.keywords, default=' ', escape=True)
+        if self.distance:
+            content += mod_utils.to_xml('distance', content=self.distance, default=' ', escape=True)
 
         # TODO: bounds
 
@@ -1612,7 +1616,7 @@ class GPX:
         return result
 
     def __hash__(self):
-        return mod_utils.hash_object(self, 'time', 'name', 'description', 'author', 'email', 'url', 'urlname', 'keywords', 'waypoints', 'routes', 'tracks', 'min_latitude', 'max_latitude', 'min_longitude', 'max_longitude') 
+        return mod_utils.hash_object(self, 'time', 'name', 'description', 'author', 'email', 'url', 'urlname', 'keywords', 'distance', 'waypoints', 'routes', 'tracks', 'min_latitude', 'max_latitude', 'min_longitude', 'max_longitude') 
 
     def clone(self):
         return mod_copy.deepcopy(self)
